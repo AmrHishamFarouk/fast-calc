@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>impedance and forces Calculations</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      padding: 0;
+      background: #f5f5f5;
+    }
+    h1 {
+      text-align: center;
+    }
+    form {
+      max-width: 700px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    label {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    input {
+      width: 100%;
+      padding: 5px;
+      margin-top: 5px;
+      font-size: 1rem;
+    }
+    button {
+      margin-top: 15px;
+      width: 100%;
+      padding: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    #output {
+      max-width: 700px;
+      margin: 20px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      white-space: pre-wrap;
+      font-family: monospace;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    hr { margin: 15px 0; }
+  </style>
+</head>
+<body>
+  <h1>Transformer Calculations</h1>
+  <form id="calcForm">
+    <label for="Ratedpower">Rated Power:</label>
+    <input type="number" id="Ratedpower" value="0">
+
+    <label for="Totalloadlosses">Total Load Losses:</label>
+    <input type="number" id="Totalloadlosses" value="0">
+
+    <label for="F">Frequency (F):</label>
+    <input type="number" id="F" value="0">
+
+    <label for="Maj">Maj:</label>
+    <input type="number" id="Maj" value="0">
+
+    <label for="Thicklvradial">Thick LV Radial:</label>
+    <input type="number" id="Thicklvradial" value="0">
+
+    <label for="Dmlv">Dmlv:</label>
+    <input type="number" id="Dmlv" value="0">
+
+    <label for="δlv">δlv:</label>
+    <input type="number" id="δlv" value="0">
+
+    <label for="Dmeanlv">Dmeanlv:</label>
+    <input type="number" id="Dmeanlv" value="0">
+
+    <label for="Nphlv">Nphlv:</label>
+    <input type="number" id="Nphlv" value="0">
+
+    <label for="Δlv">Δlv:</label>
+    <input type="number" id="Δlv" value="0">
+
+    <label for="Wirelengthlv">Wirelengthlv:</label>
+    <input type="number" id="Wirelengthlv" value="0">
+
+    <label for="Wirethicknesslv">Wirethicknesslv:</label>
+    <input type="number" id="Wirethicknesslv" value="0">
+
+    <label for="Heleclv">Heleclv:</label>
+    <input type="number" id="Heleclv" value="0">
+
+    <label for="Hmechlv">Hmechlv:</label>
+    <input type="number" id="Hmechlv" value="0">
+
+    <label for="Ilv">Ilv:</label>
+    <input type="number" id="Ilv" value="0">
+
+    <label for="Dmtr">Dmtr:</label>
+    <input type="number" id="Dmtr" value="0">
+
+    <label for="Hilothickness">Hilothickness:</label>
+    <input type="number" id="Hilothickness" value="0">
+
+    <label for="Thickhv">Thickhv:</label>
+    <input type="number" id="Thickhv" value="0">
+
+    <label for="Helechv">Helechv:</label>
+    <input type="number" id="Helechv" value="0">
+
+    <label for="Dmhv">Dmhv:</label>
+    <input type="number" id="Dmhv" value="0">
+
+    <label for="Turnsatcentertap">Turns at Center Tap:</label>
+    <input type="number" id="Turnsatcentertap" value="0">
+
+    <label for="Iphhv">Iphhv:</label>
+    <input type="number" id="Iphhv" value="0">
+
+    <label for="δhvpos7">δhvpos7:</label>
+    <input type="number" id="δhvpos7" value="0">
+
+    <label for="Dmeanhv">Dmeanhv:</label>
+    <input type="number" id="Dmeanhv" value="0">
+
+    <label for="Δhv">Δhv:</label>
+    <input type="number" id="Δhv" value="0">
+  </form>
+  <button onclick="calculate()">Calculate</button>
+  <div id="output"></div>
+  <script>
+    function calculate() {
+      // Retrieve input values (all are set to zero by default)
+      let Ratedpower      = parseFloat(document.getElementById('Ratedpower').value);
+      let Totalloadlosses = parseFloat(document.getElementById('Totalloadlosses').value);
+      let F               = parseFloat(document.getElementById('F').value);
+      let Maj             = parseFloat(document.getElementById('Maj').value);
+      let Thicklvradial   = parseFloat(document.getElementById('Thicklvradial').value);
+      let Dmlv            = parseFloat(document.getElementById('Dmlv').value);
+      let δlv             = parseFloat(document.getElementById('δlv').value);
+      let Dmeanlv         = parseFloat(document.getElementById('Dmeanlv').value);
+      let Nphlv           = parseFloat(document.getElementById('Nphlv').value);
+      let Δlv             = parseFloat(document.getElementById('Δlv').value);
+      let Wirelengthlv    = parseFloat(document.getElementById('Wirelengthlv').value);
+      let Wirethicknesslv = parseFloat(document.getElementById('Wirethicknesslv').value);
+      let Heleclv         = parseFloat(document.getElementById('Heleclv').value);
+      let Hmechlv         = parseFloat(document.getElementById('Hmechlv').value);
+      let Ilv             = parseFloat(document.getElementById('Ilv').value);
+      let Dmtr            = parseFloat(document.getElementById('Dmtr').value);
+      let Hilothickness   = parseFloat(document.getElementById('Hilothickness').value);
+      let Thickhv         = parseFloat(document.getElementById('Thickhv').value);
+      let Helechv         = parseFloat(document.getElementById('Helechv').value);
+      let Dmhv            = parseFloat(document.getElementById('Dmhv').value);
+      let Turnsatcentertap= parseFloat(document.getElementById('Turnsatcentertap').value);
+      let Iphhv           = parseFloat(document.getElementById('Iphhv').value);
+      let δhvpos7         = parseFloat(document.getElementById('δhvpos7').value);
+      let Dmeanhv         = parseFloat(document.getElementById('Dmeanhv').value);
+      let Δhv             = parseFloat(document.getElementById('Δhv').value);
+
+      // Electrical Calculations
+      let Kf = 1 - ((Thicklvradial + Hilothickness + Thickhv) / ((22 / 7) * Helechv));
+      let Ur = Totalloadlosses / (Ratedpower * 10);
+      let Uxtemp = 2.4805 * 0.00001 * F * 0.000001 * Kf *
+                   (((Dmlv * Thicklvradial) / 3) + (Dmtr * Hilothickness) + ((Dmhv * Thickhv) / 3)) *
+                   (Math.pow((Turnsatcentertap * Iphhv), 2)) *
+                   (300 / (Ratedpower * Helechv));
+      let Ux = Uxtemp * (1 + (Maj / 100));
+      let Ucc = Math.sqrt(Math.pow(Ur, 2) + Math.pow(Ux, 2));
+      
+      let voltagedrop08 = ((Ur * 0.8) + (Ux * 0.6)) + ((1 / 200) * ((Ux * 0.8) - (Ur * 0.6)));
+      let voltagedropunity = Ur + ((1 / 200) * (Math.pow(Ux, 2)));
+      let voltagelv08 = 400 * (1 - (voltagedrop08 / 100));
+      
+      let Tsclv = 1.768 * Math.pow((Ucc / δlv), 2);
+      let Tschv = 1.768 * Math.pow((Ucc / δhvpos7), 2);
+      let Tsc = (Tsclv > Tschv ? parseInt(Tschv) : parseInt(Tsclv));
+      
+      let tempcoillv = 105 + (8.2 * Math.pow(((100 / Ucc) * δlv), 2) * Tsc * 0.001);
+      let tempcoilhv = 105 + (8.2 * Math.pow(((100 / Ucc) * δhvpos7), 2) * Tsc * 0.001);
+      
+      // Mechanical Calculations
+      let Isc = (100 / Ucc) * Ilv * Math.sqrt(2) * (1 + Math.exp((-22 / 7) * (Ur / Ux)));
+      let Ec = (2 * Math.pow((22 / 7), 2) * Math.pow((Nphlv * Isc), 2) * (Dmtr * 0.001) *
+               (Hilothickness + ((Thickhv + Thicklvradial) / 3)) * 0.001) /
+               (Math.pow(10, 11) * Math.pow((((Helechv + Heleclv) * 0.001) / 2), 2));
+      let d = ((Hmechlv / 200) + ((Heleclv - Helechv) / 2)) * 0.001;
+      let Fd = 3.77 * 0.000001 * (d / (((Helechv + Heleclv) * 0.001) / 2)) * Math.pow((Nphlv * Isc), 2) * 0.0001;
+      
+      // Axial Forces
+      let Fclv = 0.75 * Ec;
+      let Fchv = Fclv; // same as Fclv
+      let Slv = (22 / 7) * Dmeanlv * Thicklvradial * 0.33;
+      let Shv = (22 / 7) * Dmeanhv * Thickhv * 0.33;
+      let σcclv = (Fclv * 10000) / Slv;
+      let σcchv = (Fchv * 10000) / Shv;
+      let Fdlv = (Fd * 10000 * 1.2) / 2;
+      let Fdhv = Fdlv; // same as Fdlv
+      let σcdlv = Fdlv / Slv;
+      let σcdhv = Fdhv / Shv;
+      let σctlv = σcclv + σcdlv;
+      let σcthv = σcchv + σcdhv;
+      let σcttotal = σcthv + σctlv;
+      
+      // Radial Forces
+      let Fr = (2 * Math.pow((22 / 7), 2) * Math.pow((Nphlv * Isc), 2) * Dmeanlv * 0.001) /
+               (100000000000 * (Heleclv * 0.001));
+      let Fs = Fr / (22 / 7);
+      let σcrlv = (Fs * 10000) / (2 * Δlv * Nphlv);
+      
+      let IVV = (Wirelengthlv * Math.pow(Wirethicknesslv, 2)) / 6;
+      let Ff = (Fr * 10000) / ((22 / 7) * Dmeanlv * Nphlv);
+      let σfflv = ((Ff * Math.pow(20, 2)) / 6) * (1 / IVV);
+      let σftlv = σcrlv + σfflv;
+      
+      let Fexhv = (2 * Math.pow((22 / 7), 2) * Math.pow((Nphlv * Isc), 2) * Dmeanhv * 0.001) /
+                  (100000000000 * (Helechv * 0.001));
+      let Fsex = Fexhv / (22 / 7);
+      let σexhv = (Fsex * 10000) / (2 * Δhv * Turnsatcentertap);
+      
+      // Build output message
+      let output = "";
+      output += "<h2>Electrical Calculations</h2>";
+      output += `<p>Kf: ${Kf.toFixed(2)}</p>`;
+      output += `<p>Ur: ${Ur.toFixed(2)}</p>`;
+      output += `<p>Uxtemp: ${Uxtemp.toFixed(2)}</p>`;
+      output += `<p>Ux: ${Ux.toFixed(2)}</p>`;
+      output += `<p>Ucc: ${Ucc.toFixed(2)}</p>`;
+      output += "<hr>";
+      output += `<p>Voltage Drop at 0.8 PF: ${voltagedrop08.toFixed(2)}</p>`;
+      output += `<p>Voltage Drop at Unity PF: ${voltagedropunity.toFixed(2)}</p>`;
+      output += `<p>Voltage LV at 0.8 PF: ${voltagelv08.toFixed(2)}</p>`;
+      output += "<hr>";
+      output += `<p>Tsclv: ${Tsclv.toFixed(2)}</p>`;
+      output += `<p>Tschv: ${Tschv.toFixed(2)}</p>`;
+      output += `<p>Tsc (selected): ${Tsc}</p>`;
+      output += `<p>Temp Coil LV: ${tempcoillv.toFixed(2)} ${tempcoillv > 250 ? "(bigger than 250)" : "(accepted)"}</p>`;
+      output += `<p>Temp Coil HV: ${tempcoilhv.toFixed(2)} ${tempcoilhv > 250 ? "(bigger than 250)" : "(accepted)"}</p>`;
+      output += "<hr>";
+      output += "<h2>Mechanical Calculations</h2>";
+      output += `<p>Isc: ${Isc.toFixed(2)}</p>`;
+      output += `<p>Ec: ${Ec.toFixed(2)}</p>`;
+      output += `<p>d: ${d.toFixed(4)}</p>`;
+      output += `<p>Fd: ${Fd.toFixed(2)}</p>`;
+      output += "<hr>";
+      output += "<h3>Axial Forces</h3>";
+      output += `<p>Fclv = Fchv: ${Fclv.toFixed(2)}</p>`;
+      output += `<p>Slv: ${Slv.toFixed(2)}</p>`;
+      output += `<p>Shv: ${Shv.toFixed(2)}</p>`;
+      output += `<p>σcclv: ${σcclv.toFixed(2)}</p>`;
+      output += `<p>σcchv: ${σcchv.toFixed(2)}</p>`;
+      output += `<p>Fdlv = Fdhv: ${Fdlv.toFixed(2)}</p>`;
+      output += `<p>σcdlv: ${σcdlv.toFixed(2)}</p>`;
+      output += `<p>σcdhv: ${σcdhv.toFixed(2)}</p>`;
+      output += `<p>σctlv: ${σctlv.toFixed(2)}</p>`;
+      output += `<p>σcthv: ${σcthv.toFixed(2)}</p>`;
+      output += `<p>σcttotal: ${σcttotal.toFixed(2)}</p>`;
+      if (σcttotal <= 40.0) {
+        output += `<p>Result: ≤ 40 N/mm²</p>`;
+      } else {
+        output += `<p>Result: careful not ≤ 40 N/mm²</p>`;
+      }
+      output += "<hr>";
+      output += "<h3>Radial Forces</h3>";
+      output += `<p>Fr: ${Fr.toFixed(2)}</p>`;
+      output += `<p>Fs: ${Fs.toFixed(2)}</p>`;
+      output += `<p>σcrlv: ${σcrlv.toFixed(2)}</p>`;
+      if (σcrlv <= 80.0) {
+        output += `<p>Result: ≤ 80 N/mm²</p>`;
+      } else {
+        output += `<p>Result: careful not ≤ 80 N/mm²</p>`;
+      }
+      output += "<hr>";
+      output += `<p>IVV: ${IVV.toFixed(2)}</p>`;
+      output += `<p>Ff: ${Ff.toFixed(2)}</p>`;
+      output += `<p>σfflv: ${σfflv.toFixed(2)}</p>`;
+      output += `<p>σftlv: ${σftlv.toFixed(2)}</p>`;
+      if (σftlv <= 130.0) {
+        output += `<p>Result: ≤ 130 N/mm²</p>`;
+      } else {
+        output += `<p>Result: careful not ≤ 130 N/mm²</p>`;
+      }
+      output += "<hr>";
+      output += `<p>Fexhv: ${Fexhv.toFixed(2)}</p>`;
+      output += `<p>Fsex: ${Fsex.toFixed(2)}</p>`;
+      output += `<p>σexhv: ${σexhv.toFixed(2)}</p>`;
+      if (σexhv <= 80.0) {
+        output += `<p>Result: ≤ 80 N/mm²</p>`;
+      } else {
+        output += `<p>Result: careful not ≤ 80 N/mm²</p>`;
+      }
+      
+      document.getElementById('output').innerHTML = output;
+    }
+  </script>
+</body>
+</html>

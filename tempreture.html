@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exchange Coefficient Calculator</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+        input { margin: 5px; padding: 8px; width: 100px; }
+        button { margin-top: 10px; padding: 10px; cursor: pointer; }
+        .output { margin-top: 20px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <h2>Temperature Calculator</h2>
+
+    <label>n: <input type="number" id="n" value="5"></label>
+    <label>f1: <input type="number" id="f1" value="0.33"></label>
+    <label>f2: <input type="number" id="f2" value="0.67"></label>
+    <label>r1: <input type="number" id="r1" value="0.0"></label>
+    <label>r2: <input type="number" id="r2" value="0.0"></label>
+    <label>r: <input type="number" id="r" value="0.0"></label>
+    <label>w: <input type="number" id="w" value="0.0"></label>
+    <label>Hmech (m): <input type="number" id="Hmech" value="0.5"></label>
+
+    <button onclick="calculate()">Calculate</button>
+
+    <div class="output" id="results"></div>
+
+    <script>
+        function calculate() {
+            let n = parseFloat(document.getElementById("n").value);
+            let f1 = parseFloat(document.getElementById("f1").value);
+            let f2 = parseFloat(document.getElementById("f2").value);
+            let r1 = parseFloat(document.getElementById("r1").value);
+            let r2 = parseFloat(document.getElementById("r2").value);
+            let r = parseFloat(document.getElementById("r").value);
+            let w = parseFloat(document.getElementById("w").value);
+            let Hmech = parseFloat(document.getElementById("Hmech").value);
+
+            let co = 39 * (1.05 - (0.1 * Hmech)) * Math.pow((((n * w) / 4) * ((1 / f1) + (1 / f2))), (1 / 8));
+
+            let w1 = w*(( (n/(f2*co)) + ((n*r2)/f2) + ((n*(n-1)*r)/2) ) / ( (1/(f1*co)) +(1/(f2*co)) + (r1/f1) + (r2/f2) + ((n-1)*r) ));
+
+            let ktemp = w1 / w;
+
+
+            let k = (ktemp | 0) + 1;
+
+
+
+            let sub1 = ((k*(k-1))/2) - (((n-k)*(n-k-1))/2);
+            let sub2 = (((n)*(n-k)*(n-k-1))/2) - ( (1/6) *( ((k)*(k-1)*(k+1)) + ( (n-k)*(n-k-1) )) );
+
+            let temp = ((w1/n)*( k*( (1/(co*f1)) + (r1/f1) ) - ((n-k)*( (1/(co*f2)) + (r2/f2) )) + (r*(sub1)))) + ((w/n)*( ((n*(n-k))/(co*f2)) + ((n*(n-k)*r2)/f2) + (r*sub2) ));
+
+            document.getElementById("results").innerHTML = `
+                <p>Average Exchange Coefficient: ${co.toPrecision(4)}</p>
+                <p>W1: ${w1.toPrecision(4)} W/m²</p>
+                <p>K temporary: ${ktemp}</p>
+                <p>K: ${k}</p>
+                <p>Average Temperature: ${temp.toPrecision(4)} °C</p>
+            `;
+        }
+    </script>
+
+</body>
+</html>
